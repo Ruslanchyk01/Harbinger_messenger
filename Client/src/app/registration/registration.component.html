@@ -1,0 +1,23 @@
+<form #registrationForm="ngForm" (ngSubmit)="registration()" autocomplete="off">
+    <img class="mb-4" src="./favicon.ico" alt="" width="72" height="57">
+    <h1 class="h3 mb-3 fw-normal">Please sign up</h1>
+
+    <div class="form-floating">
+      <input name="userName" [(ngModel)]="model.userName" type="text" class="form-control" id="floatingUserName" placeholder="User name">
+      <label for="floatingUserName">User name</label>
+    </div>
+    <div class="form-floating">
+      <input name="password" [(ngModel)]="model.password" type="password" class="form-control" id="floatingPassword" placeholder="Password">
+      <label for="floatingPassword">Password</label>
+    </div>
+
+    <div class="form-check text-start my-3">
+      <input class="form-check-input" type="checkbox" value="remember-me" id="flexCheckDefault">
+      <label class="form-check-label" for="flexCheckDefault">
+        Remember me
+      </label>
+    </div>
+    <button class="btn btn-success w-100 py-2 my-3" type="submit">Sign up</button>
+    <button (click)="cancel()" class="btn btn-outline-secondary w-100 py-2" type="button">Cancel</button>
+    <p class="mt-5 mb-3 text-body-secondary">© 2017-2023</p>
+  </form>

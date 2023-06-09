@@ -1,0 +1,32 @@
+<nav class="p-3 text-bg-dark">
+    <div class="container">
+      <div class="d-flex flex-wrap align-items-center justify-content-center">
+        <a routerLink="/" class="d-flex align-items-center mb-2 px-2 mb-lg-0">
+          <img src="./favicon.ico" alt="">
+        </a>
+
+        <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+          <li><a routerLink="/users" routerLinkActive="text-warning" class="nav-link px-2 navbar_link-item">Users</a></li>
+          <li><a routerLink="/groups" routerLinkActive="text-warning" class="nav-link px-2 navbar_link-item">Groups</a></li>
+          <li><a routerLink="/messages" routerLinkActive="text-warning"class="nav-link px-2 navbar_link-item">Private messages</a></li>
+        </ul>
+
+        <form *ngIf="(accountService.currentUser$ | async) === null" #logInForm="ngForm" class="d-flex align-items-center" autocomplete="off" (ngSubmit)="logIn()">
+          <input name="userName" [(ngModel)]="model.userName" class="form-control me-2" type="text" placeholder="User name">
+          <input name="password" [(ngModel)]="model.password" class="form-control me-2" type="password" placeholder="Password">
+
+          <button type="button" class="btn btn-warning" type="submit">Login</button>
+        </form>
+
+        <div  *ngIf="accountService.currentUser$ | async as user" class="dropdown px-2" dropdown>
+          <a class="nav-link dropdown-toggle" dropdownToggle>Hello {{user.userName | titlecase}}</a>
+
+          <div class="dropdown-menu" *dropdownMenu>
+            <a class="dropdown-item">Edit Profile</a>
+            <div class="dropdown-divider"></div>
+            <a (click)="logOut()" class="dropdown-item">Log out</a>
+          </div>
+        </div>
+      </div>
+    </div>
+</nav>
