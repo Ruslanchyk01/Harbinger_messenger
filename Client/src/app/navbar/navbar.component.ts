@@ -18,9 +18,6 @@ export class NavbarComponent {
   logIn() {
     this.accountService.logIn(this.model).subscribe(response => {
       this.router.navigateByUrl('/users');
-    }, error => {
-      console.log(error);
-      this.toastr.error(error.error);
     })
   }
 

@@ -9,7 +9,9 @@
           <li><a routerLink="/users" routerLinkActive="text-warning" class="nav-link px-2 navbar_link-item">Users</a></li>
           <li><a routerLink="/groups" routerLinkActive="text-warning" class="nav-link px-2 navbar_link-item">Groups</a></li>
           <li><a routerLink="/messages" routerLinkActive="text-warning"class="nav-link px-2 navbar_link-item">Private messages</a></li>
+          <li><a routerLink="/errors" routerLinkActive="text-warning"class="nav-link px-2 navbar_link-item">Errors</a></li>
         </ul>
+        
 
         <form *ngIf="(accountService.currentUser$ | async) === null" #logInForm="ngForm" class="d-flex align-items-center" autocomplete="off" (ngSubmit)="logIn()">
           <input name="userName" [(ngModel)]="model.userName" class="form-control me-2" type="text" placeholder="User name">

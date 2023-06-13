@@ -6,6 +6,9 @@ import { UserDetailComponent } from './users/user-detail/user-detail.component';
 import { GroupsComponent } from './groups/groups.component';
 import { MessagesComponent } from './messages/messages.component';
 import { AuthGuard } from './_guards/auth.guard';
+import { TestErrorsComponent } from './errors/test-errors/test-errors.component';
+import { NotFoundComponent } from './errors/not-found/not-found.component';
+import { ServerErrorComponent } from './errors/server-error/server-error.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -19,7 +22,10 @@ const routes: Routes = [
       { path: 'messages', component: MessagesComponent }
     ]
   },
-  { path: '**', redirectTo: '', pathMatch: 'full' }
+  { path: 'errors', component: TestErrorsComponent },
+  { path: 'notfound', component: NotFoundComponent },
+  { path: 'servererror', component: ServerErrorComponent },
+  { path: '**', redirectTo: 'notfound', pathMatch: 'full' }
 ];
 
 @NgModule({
