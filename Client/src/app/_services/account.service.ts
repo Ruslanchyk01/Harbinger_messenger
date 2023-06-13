@@ -3,12 +3,13 @@ import { Injectable } from '@angular/core';
 import { map } from 'rxjs/operators';
 import { User } from '../_models/user';
 import { ReplaySubject } from 'rxjs';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AccountService {
-  basicUrl = 'https://localhost:7276/api/';
+  basicUrl = environment.apiUrl;
   private currentUserSource = new ReplaySubject<User>(1);
   currentUser$ = this.currentUserSource.asObservable();
 

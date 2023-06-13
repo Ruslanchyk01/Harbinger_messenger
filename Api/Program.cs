@@ -1,11 +1,14 @@
 using System.Text;
 using Api.Data;
+using Api.Helpers;
 using Api.Interfaces;
 using Api.Middleware;
 using Api.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+
+AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,6 +17,7 @@ string corsapp = "corsapp";
 
 builder.Services.AddScoped<ITokenCreator, TokenCreator>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddDbContext<DataContext>(option =>
 {
     option.UseNpgsql(connection);
@@ -58,17 +62,17 @@ app.UseAuthorization();
 app.MapControllers();
 
 using var scope = app.Services.CreateScope();
-var services = scope.ServiceProvider;
-try 
-{
-    var context = services.GetRequiredService<DataContext>();
-    await context.Database.MigrateAsync();
-    await Seed.SeedUsers(context);
-}
-catch (Exception ex)
-{
-    var logger = services.GetService<ILogger<Program>>();
-    logger.LogError(ex, "An error occurred during migration");
-}
+ var services = scope.ServiceProvider;
+ try 
+ {
+     var context = services.GetRequiredService<DataContext>();
+     await context.Database.MigrateAsync();
+     await Seed.SeedUsers(context);
+ }
+ catch (Exception ex)
+ {
+     var logger = services.GetService<ILogger<Program>>();
+     logger.LogError(ex, "An error occurred during migration");
+ }
 
 app.Run();

@@ -24,7 +24,7 @@
           <a class="nav-link dropdown-toggle" dropdownToggle>Hello {{user.userName | titlecase}}</a>
 
           <div class="dropdown-menu" *dropdownMenu>
-            <a class="dropdown-item">Edit Profile</a>
+            <a routerLink="/user/edit" class="dropdown-item">Edit Profile</a>
             <div class="dropdown-divider"></div>
             <a (click)="logOut()" class="dropdown-item">Log out</a>
           </div>

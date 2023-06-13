@@ -18,6 +18,11 @@ import { TestErrorsComponent } from './errors/test-errors/test-errors.component'
 import { ErrorInterceptor } from './_interceptors/error.interceptor';
 import { NotFoundComponent } from './errors/not-found/not-found.component';
 import { ServerErrorComponent } from './errors/server-error/server-error.component';
+import { UserCardComponent } from './users/user-card/user-card.component';
+import { JwtInterceptor } from './_interceptors/jwt.interceptor';
+import { UserEditComponent } from './users/user-edit/user-edit.component';
+import { NgxSpinnerModule } from 'ngx-spinner';
+import { LoadingInterceptor } from './_interceptors/loading.interceptor';
 
 
 @NgModule({
@@ -32,7 +37,11 @@ import { ServerErrorComponent } from './errors/server-error/server-error.compone
     MessagesComponent,
     TestErrorsComponent,
     NotFoundComponent,
-    ServerErrorComponent
+    ServerErrorComponent,
+    UserCardComponent,
+    ServerErrorComponent,
+    UserCardComponent,
+    UserEditComponent
   ],
   imports: [
     BrowserModule,
@@ -40,10 +49,13 @@ import { ServerErrorComponent } from './errors/server-error/server-error.compone
     HttpClientModule,
     BrowserAnimationsModule,
     FormsModule,
-    SharedModule
+    SharedModule,
+    NgxSpinnerModule
   ],
   providers: [
-    { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true }
+    {provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true},
+    {provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true},
+    {provide: HTTP_INTERCEPTORS, useClass: LoadingInterceptor, multi: true}
   ],
   bootstrap: [AppComponent]
 })
