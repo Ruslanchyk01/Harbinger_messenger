@@ -34,27 +34,34 @@ namespace Api.Data
 
         public async Task<Message> GetMessage(int id)
         {
-            return await _context.Messages.FindAsync(id);
+            return await _context.Messages
+            .Include(u => u.Sender)
+            .Include(u => u.Recipient)
+            .SingleOrDefaultAsync(x => x.Id == id);
         }
 
         public async Task<PagedList<MessageDTO>> GetMessagesForUser(MessageParams messageParams)
         {
             var query = _context.Messages
-                .OrderByDescending(m => m.MessageSent)
+                .OrderByDescending(x => x.MessageSent)
                 .AsQueryable();
 
             query = messageParams.Container switch
             {
-                "Inbox" => query.Where(u => u.Recipient.UserName == messageParams.UserName),
-                "Outbox" => query.Where(u => u.Sender.UserName == messageParams.UserName),
-                _ => query.Where(u => u.Recipient.UserName == messageParams.UserName && u.DateRead == null)
+                "Inbox" => query.Where(u => u.RecipientName == messageParams.UserName 
+                    && u.RecipientDeleted == false),
+                "Outbox" => query.Where(u => u.SenderName == messageParams.UserName 
+                    && u.SenderDeleted == false),
+                _ => query.Where(u => u.RecipientName == messageParams.UserName 
+                    && u.RecipientDeleted == false && u.DateRead == null)
             };
 
-            var message = query.ProjectTo<MessageDTO>(_mapper.ConfigurationProvider);
-            
-            return await PagedList<MessageDTO>.CreateAsync(message, messageParams.PageNumber, messageParams.PageSize);
+            var messages = query.ProjectTo<MessageDTO>(_mapper.ConfigurationProvider);
 
+            return await PagedList<MessageDTO>
+                .CreateAsync(messages, messageParams.PageNumber, messageParams.PageSize);
         }
+        
         public async Task<IEnumerable<MessageDTO>> GetMessageThread(string currentUserName, 
              string recipientUserName)
          {

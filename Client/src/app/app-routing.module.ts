@@ -11,6 +11,7 @@ import { NotFoundComponent } from './errors/not-found/not-found.component';
 import { ServerErrorComponent } from './errors/server-error/server-error.component';
 import { UserEditComponent } from './users/user-edit/user-edit.component';
 import { PreventUnsavedChangesGuard } from './_guards/prevent-unsaved-changes.guard';
+import { MemberDetailedResolver } from './_resolvers/member-detailed.resolver';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -19,7 +20,7 @@ const routes: Routes = [
     canActivate: [AuthGuard],
     children: [
       { path: 'users', component: UserListComponent },
-      { path: 'users/:username', component: UserDetailComponent },
+      { path: 'users/:username', component: UserDetailComponent, resolve: {member: MemberDetailedResolver}},
       { path: 'user/edit', component: UserEditComponent, canDeactivate: [PreventUnsavedChangesGuard] },
       { path: 'groups', component: GroupsComponent },
       { path: 'messages', component: MessagesComponent }

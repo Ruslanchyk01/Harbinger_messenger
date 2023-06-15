@@ -6,7 +6,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NavbarComponent } from './navbar/navbar.component';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HomeComponent } from './home/home.component';
 import { RegistrationComponent } from './registration/registration.component';
 import { UserListComponent } from './users/user-list/user-list.component';
@@ -21,9 +21,10 @@ import { ServerErrorComponent } from './errors/server-error/server-error.compone
 import { UserCardComponent } from './users/user-card/user-card.component';
 import { JwtInterceptor } from './_interceptors/jwt.interceptor';
 import { UserEditComponent } from './users/user-edit/user-edit.component';
-import { NgxSpinnerModule } from 'ngx-spinner';
 import { LoadingInterceptor } from './_interceptors/loading.interceptor';
 import { EditPhotoComponent } from './users/edit-photo/edit-photo.component';
+import { NgxSpinnerModule } from 'ngx-spinner';
+import { UserMessagesComponent } from './users/user-messages/user-messages.component';
 
 
 @NgModule({
@@ -43,7 +44,8 @@ import { EditPhotoComponent } from './users/edit-photo/edit-photo.component';
     ServerErrorComponent,
     UserCardComponent,
     UserEditComponent,
-    EditPhotoComponent
+    EditPhotoComponent,
+    UserMessagesComponent,
   ],
   imports: [
     BrowserModule,
@@ -52,7 +54,7 @@ import { EditPhotoComponent } from './users/edit-photo/edit-photo.component';
     BrowserAnimationsModule,
     FormsModule,
     SharedModule,
-    NgxSpinnerModule
+    ReactiveFormsModule
   ],
   providers: [
     {provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true},

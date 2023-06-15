@@ -16,12 +16,6 @@ string connection = builder.Configuration.GetConnectionString("DefaultConnection
 var cloud = builder.Configuration.GetSection("CloudinarySettings");
 string corsapp = "corsapp";
 
-builder.Services.Configure<CloudSettings>(cloud);
-builder.Services.AddScoped<ITokenCreator, TokenCreator>();
-builder.Services.AddScoped<IPhotoService, PhotoService>();
-builder.Services.AddScoped<IUserRepository, UserRepository>();
-builder.Services.AddScoped<IMessageRepository, MessageRepository>();
-builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddDbContext<DataContext>(option =>
 {
     option.UseNpgsql(connection);
@@ -31,6 +25,13 @@ builder.Services.AddCors(p => p.AddPolicy(corsapp, option =>
 {
         option.WithOrigins("https://localhost:4200").AllowAnyMethod().AllowAnyHeader();
 }));
+
+builder.Services.AddScoped<ITokenCreator, TokenCreator>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+builder.Services.Configure<CloudSettings>(cloud);
+builder.Services.AddScoped<IPhotoService, PhotoService>();
+builder.Services.AddScoped<IMessageRepository, MessageRepository>();
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(option =>
 {
     option.TokenValidationParameters = new TokenValidationParameters
@@ -41,7 +42,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
         ValidateAudience = false
     };
 });
-
+builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
