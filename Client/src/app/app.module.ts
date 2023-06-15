@@ -23,6 +23,7 @@ import { JwtInterceptor } from './_interceptors/jwt.interceptor';
 import { UserEditComponent } from './users/user-edit/user-edit.component';
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { LoadingInterceptor } from './_interceptors/loading.interceptor';
+import { EditPhotoComponent } from './users/edit-photo/edit-photo.component';
 
 
 @NgModule({
@@ -41,7 +42,8 @@ import { LoadingInterceptor } from './_interceptors/loading.interceptor';
     UserCardComponent,
     ServerErrorComponent,
     UserCardComponent,
-    UserEditComponent
+    UserEditComponent,
+    EditPhotoComponent
   ],
   imports: [
     BrowserModule,

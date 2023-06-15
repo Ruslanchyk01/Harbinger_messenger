@@ -13,10 +13,14 @@ AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 var builder = WebApplication.CreateBuilder(args);
 
 string connection = builder.Configuration.GetConnectionString("DefaultConnection");
+var cloud = builder.Configuration.GetSection("CloudinarySettings");
 string corsapp = "corsapp";
 
+builder.Services.Configure<CloudSettings>(cloud);
 builder.Services.AddScoped<ITokenCreator, TokenCreator>();
+builder.Services.AddScoped<IPhotoService, PhotoService>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IMessageRepository, MessageRepository>();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddDbContext<DataContext>(option =>
 {

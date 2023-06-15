@@ -21,7 +21,8 @@
         </form>
 
         <div  *ngIf="accountService.currentUser$ | async as user" class="dropdown px-2" dropdown>
-          <a class="nav-link dropdown-toggle" dropdownToggle>Hello {{user.userName | titlecase}}</a>
+          <img src="{{user.photoUrl}}" alt="{{user.userName}}" class="img-logo">
+          <a class="dropdown-toggle text-white" dropdownToggle style="text-decoration: none;">Hello {{user.userName | titlecase}}</a>
 
           <div class="dropdown-menu" *dropdownMenu>
             <a routerLink="/user/edit" class="dropdown-item">Edit Profile</a>

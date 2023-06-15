@@ -39,4 +39,8 @@ import { map, of } from 'rxjs';
       })
     );
    }
+
+   setMemberPhoto(photoId: number) {
+    return this.http.put(this.baseUrl + 'users/setmainphoto/' + photoId, {});
+   }
  }
