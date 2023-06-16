@@ -1,9 +1,11 @@
+using System.Net;
 using System.Text;
 using Api.Data;
 using Api.Helpers;
 using Api.Interfaces;
 using Api.Middleware;
 using Api.Services;
+using Api.Signalr;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -23,9 +25,10 @@ builder.Services.AddDbContext<DataContext>(option =>
 builder.Services.AddControllers();
 builder.Services.AddCors(p => p.AddPolicy(corsapp, option =>
 {
-        option.WithOrigins("https://localhost:4200").AllowAnyMethod().AllowAnyHeader();
+        option.WithOrigins("https://localhost:4200").AllowAnyMethod().AllowAnyHeader().AllowCredentials();
 }));
 
+builder.Services.AddSingleton<PresenceTracker>();
 builder.Services.AddScoped<ITokenCreator, TokenCreator>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
@@ -41,10 +44,26 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
         ValidateIssuer = false,
         ValidateAudience = false
     };
+    option.Events = new JwtBearerEvents
+    {
+        OnMessageReceived = context =>
+        {
+            var accessToken = context.Request.Query["access_token"];
+            var path = context.HttpContext.Request.Path;
+
+            if(!string.IsNullOrEmpty(accessToken) && path.StartsWithSegments("/hubs"))
+            {
+                context.Token = accessToken;
+            }
+
+            return Task.CompletedTask;
+        }
+    };
 });
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddSignalR();
 
 var app = builder.Build();
 
@@ -59,12 +78,28 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseCors(corsapp);
+// app.Use((context, next) =>
+// {
+//     var ipAddress = context.Connection.RemoteIpAddress;
+
+//     var allowedIpAddress = IPAddress.Parse("192.168.0.1");
+
+//     if (!IPAddress.Equals(ipAddress, allowedIpAddress))
+//     {
+//         context.Response.StatusCode = (int)HttpStatusCode.Forbidden;
+//         return Task.CompletedTask;
+//     }
+
+//     return next();
+// });
+
 
 app.UseAuthentication();
-
 app.UseAuthorization();
 
 app.MapControllers();
+app.MapHub<PresenceHub>("hubs/presence");
+app.MapHub<MessageHub>("hubs/message");
 
 using var scope = app.Services.CreateScope();
  var services = scope.ServiceProvider;
